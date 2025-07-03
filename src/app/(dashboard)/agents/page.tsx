@@ -10,7 +10,7 @@ import {
 
 const Page = async () => {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions());
+  await queryClient.prefetchQuery(trpc.agents.getMany.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense fallback={<AgentsViewLoading />}>
