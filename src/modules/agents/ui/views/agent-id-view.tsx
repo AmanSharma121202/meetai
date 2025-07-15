@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useState } from "react";
-import {UpdateAgentDialog} from "../components/update-agent-dialog"
+import { UpdateAgentDialog } from "../components/update-agent-dialog";
 interface Props {
   agentId: string;
 }
@@ -61,17 +61,17 @@ export const AgentIdView = ({ agentId }: Props) => {
 
   return (
     <>
-      <RemoveConfirmation/>
+      <RemoveConfirmation />
       <UpdateAgentDialog
-      open ={updateAgentDialogOpen}
-      onOpenChange={setUpdateAgentDialogOpen}
-      initialValues={data}
+        open={updateAgentDialogOpen}
+        onOpenChange={setUpdateAgentDialogOpen}
+        initialValues={data}
       />
       <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
         <AgentIdViewHeader
           agentId={agentId}
           agentName={data.name}
-          onEdit={()=> setUpdateAgentDialogOpen(true)}
+          onEdit={() => setUpdateAgentDialogOpen(true)}
           onRemove={handleRemoveAgent}
         />
         <div className="bg-white rounded-lg border">
