@@ -20,7 +20,7 @@ export const AgentIdFilter = () => {
 
   return (
     <CommandSelect
-      className="h=-9"
+      className="h-9"
       placeholder="Agent"
       options={(data?.items ?? []).map((agent) => ({
         id: agent.id,
