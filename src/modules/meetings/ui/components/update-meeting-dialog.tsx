@@ -4,13 +4,13 @@ import { MeetingGetOne } from "../../types";
 interface UpdateMeetingDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  initalValues: MeetingGetOne;
+  initialValues: MeetingGetOne;
 }
 
 export const UpdateMeetingDialog = ({
   open,
   onOpenChange,
-  initalValues,
+  initialValues,
 }: UpdateMeetingDialogProps) => {
   return (
     <ResponsiveDialog
@@ -24,7 +24,7 @@ export const UpdateMeetingDialog = ({
           onOpenChange(false);
         }}
         onCancel={() => onOpenChange(false)}
-        initialValues={initalValues}
+        initialValues={initialValues}
       />
     </ResponsiveDialog>
   );
