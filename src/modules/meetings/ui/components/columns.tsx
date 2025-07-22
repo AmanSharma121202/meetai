@@ -13,16 +13,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import humanizeDuration from "humanize-duration";
-import { cn } from "@/lib/utils";
-
-function formatDuration(seconds: number) {
-  return humanizeDuration(seconds * 1000, {
-    largest: 1,
-    round: true,
-    units: ["h", "m", "s"],
-  });
-}
+import { cn, formatDuration } from "@/lib/utils";
 
 const statusIconMap = {
   upcoming: ClockArrowUpIcon,
@@ -56,12 +47,14 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
             </span>
           </div>
           <GeneratedAvatar
-          variant="botttsNeutral"
-          seed = {row.original.agent.name}
-          className="size-4"
+            variant="botttsNeutral"
+            seed={row.original.agent.name}
+            className="size-4"
           />
           <span className="text-sm text-muted-foreground">
-            {row.original.startedAt? format(row.original.startedAt, "MMM d"): ""}
+            {row.original.startedAt
+              ? format(row.original.startedAt, "MMM d")
+              : ""}
           </span>
         </div>
       </div>
@@ -72,37 +65,40 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const Icon = statusIconMap[row.original.status as keyof typeof statusIconMap];
+      const Icon =
+        statusIconMap[row.original.status as keyof typeof statusIconMap];
 
       return (
         <Badge
-        variant="outline"
-        className={cn(
-          "capitalize [&>svg]:size-4 text-muted-foreground",
-          statusColorMap[row.original.status as keyof typeof statusColorMap]
-        )}
+          variant="outline"
+          className={cn(
+            "capitalize [&>svg]:size-4 text-muted-foreground",
+            statusColorMap[row.original.status as keyof typeof statusColorMap]
+          )}
         >
           <Icon
-          className={cn(
-            row.original.status === "processing" && "animate-spin"
-          )}
+            className={cn(
+              row.original.status === "processing" && "animate-spin"
+            )}
           />
           {row.original.status}
         </Badge>
-      )
+      );
     },
   },
-    {
-      accessorKey:"duration",
-      header: "duration",
-      cell :({row}) => (
-        <Badge
+  {
+    accessorKey: "duration",
+    header: "duration",
+    cell: ({ row }) => (
+      <Badge
         variant="outline"
         className="capitalize [&>svg]:size-4 flex items-center gap-x-2"
-        >
-        <ClockFadingIcon className="text-blue-700"/>
-        {row.original.duration? formatDuration(row.original.duration): "No duration"}
-        </Badge>
-      )
-    }
-]
+      >
+        <ClockFadingIcon className="text-blue-700" />
+        {row.original.duration
+          ? formatDuration(row.original.duration)
+          : "No duration"}
+      </Badge>
+    ),
+  },
+];
