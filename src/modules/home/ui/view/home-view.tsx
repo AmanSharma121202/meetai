@@ -11,8 +11,8 @@ export const HomeView = () => {
         </h1>
         <p className="text-lg text-gray-600 mb-10">
           Meet.AI connects users with intelligent AI agents via virtual
-          meetings. Whether you're looking for help, automation, or insightful
-          conversation, our platform handles it all—efficiently and
+          meetings. Whether you&apos;re looking for help, automation, or
+          insightful conversation, our platform handles it all efficiently and
           intelligently.
         </p>
       </div>
