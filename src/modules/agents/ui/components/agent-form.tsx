@@ -18,6 +18,7 @@ import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface AgentFormProps {
   onSuccess?: () => void;
@@ -31,46 +32,49 @@ export const AgentForm = ({
   initialValues,
 }: AgentFormProps) => {
   const trpc = useTRPC();
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-            trpc.agents.getMany.queryOptions({}),
+          trpc.agents.getMany.queryOptions({})
+        );
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions()
         );
 
-        //TODO: Invalidate free tier usage
         onSuccess?.();
       },
       onError: (error) => {
         toast.error(error.message);
 
-        //TODO : Check if error code is "FORBIDDEN", redirect to "/upgrade"
+        if (error.data?.code === "FORBIDDEN") {
+          router.push("/upgrade");
+        }
       },
-    }),
+    })
   );
 
-    const updateAgent = useMutation(
+  const updateAgent = useMutation(
     trpc.agents.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-            trpc.agents.getMany.queryOptions({}),
+          trpc.agents.getMany.queryOptions({})
         );
 
-        if(initialValues?.id){
-            await queryClient.invalidateQueries(
-                trpc.agents.getOne.queryOptions({id: initialValues.id}),
-            );
+        if (initialValues?.id) {
+          await queryClient.invalidateQueries(
+            trpc.agents.getOne.queryOptions({ id: initialValues.id })
+          );
         }
         onSuccess?.();
       },
       onError: (error) => {
         toast.error(error.message);
-
-        //TODO : Check if error code is "FORBIDDEN", redirect to "/upgrade"
       },
-    }),
+    })
   );
 
   const form = useForm<z.infer<typeof agentsInsertSchema>>({
@@ -86,7 +90,7 @@ export const AgentForm = ({
 
   const onSubmit = (values: z.infer<typeof agentsInsertSchema>) => {
     if (isEdit) {
-      updateAgent.mutate({...values, id: initialValues.id});
+      updateAgent.mutate({ ...values, id: initialValues.id });
     } else {
       createAgent.mutate(values);
     }
@@ -110,7 +114,7 @@ export const AgentForm = ({
               <FormControl>
                 <Input {...field} placeholder="e.g. Math tutor" />
               </FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -121,25 +125,30 @@ export const AgentForm = ({
             <FormItem>
               <FormLabel>Instructions</FormLabel>
               <FormControl>
-                <Textarea {...field} placeholder="e.g. You are a helpful math assistent that can answer questions and help with assignments" />
+                <Textarea
+                  {...field}
+                  placeholder="e.g. You are a helpful math assistent that can answer questions and help with assignments"
+                />
               </FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-between gap-x-2">
-            {onCancel && (
-                <Button
-                variant="ghost"
-                disabled={isPending}
-                type="button"
-                onClick={()=> onCancel()}
-                > Cancel
-                </Button>
-            )}
-            <Button disabled={isPending} type="submit">
-              {isEdit? "Update":"Create"}
+          {onCancel && (
+            <Button
+              variant="ghost"
+              disabled={isPending}
+              type="button"
+              onClick={() => onCancel()}
+            >
+              {" "}
+              Cancel
             </Button>
+          )}
+          <Button disabled={isPending} type="submit">
+            {isEdit ? "Update" : "Create"}
+          </Button>
         </div>
       </form>
     </Form>
