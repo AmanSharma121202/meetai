@@ -6,7 +6,7 @@ import { polarClient } from "@/lib/polar";
 import { db } from "@/db";
 import { agents, meetings } from "@/db/schema";
 import { count, eq } from "drizzle-orm";
-import { MAX_FREE_AGENTS } from "@/modules/premium/constants";
+import { MAX_FREE_AGENTS, MAX_FREE_MEETINGS } from "@/modules/premium/constants";
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -61,7 +61,7 @@ export const premiumProcedure = (entity: "meetings" | "agents") =>
 
     const isPremium = customer.activeSubscriptions.length > 0;
     const isFreeAgentLimitReached = userAgents.count >= MAX_FREE_AGENTS;
-    const isFreeMeetingLimitReached = userMeetings.count >= MAX_FREE_AGENTS;
+    const isFreeMeetingLimitReached = userMeetings.count >= MAX_FREE_MEETINGS;
 
     const shouldThrowMeetingError =
       entity === "meetings" && isFreeMeetingLimitReached && !isPremium;
