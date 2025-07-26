@@ -15,7 +15,6 @@ import {
 import { db } from "@/db";
 import { agents, meetings } from "@/db/schema";
 import { streamVideo } from "@/lib/stream-video";
-import { error } from "console";
 import { inngest } from "@/inngest/client";
 import { generateAvatarUri } from "@/lib/avatar";
 import { streamChat } from "@/lib/stream-chat";
@@ -144,7 +143,7 @@ export async function POST(req: NextRequest) {
       .returning();
 
     if (!updatedMeeting) {
-      return NextResponse.json({ error: "Missing not found" }, { status: 400 });
+      return NextResponse.json({ error: "Meeting not found" }, { status: 400 });
     }
 
     await inngest.send({
@@ -193,7 +192,7 @@ export async function POST(req: NextRequest) {
       .where(eq(agents.id, existingMeeting.agentId));
 
     if (!existingAgent) {
-      return NextResponse.json({ erroe: "Agent not found" }, { status: 404 });
+      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
 
     if (userId !== existingAgent.id) {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { DashboardUserButton } from "./dashboard-user-button";
-
+import { DashboardTrial } from "./dashboard-trial";
 
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -109,7 +109,7 @@ export const DashboardSidebar = () => {
       </SidebarContent>
     
     <SidebarFooter className="text-white">
-   
+      <DashboardTrial/>
       <DashboardUserButton/>
     </SidebarFooter>
 
